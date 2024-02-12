@@ -483,3 +483,16 @@ tr:hover {
 .mpa-ballot {
   background-color: #ddd0d0;
 }
+
+select {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  margin-top: 5px;
+}
+
+.filter {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}

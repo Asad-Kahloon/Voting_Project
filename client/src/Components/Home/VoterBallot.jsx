@@ -72,14 +72,14 @@ const VoterBallot = () => {
               </thead>
               <tbody>
                 {mpas.map((mpa) => (
-                  <tr key={mpa.id}>
+                  <tr key={mpa._id}>
                     <td>{mpa.name}</td>
                     <td>{mpa.symbol}</td>
                     <td>{mpa.cnic}</td>
                     <td>{mpa.votes}</td>
                     <td>
                       <Link
-                        to={`/voter/votedmpa/${mpa._id}`}
+                        to={`/votedmpa/${mpa._id}`}
                         className="btn-login edit link"
                       >
                         Vote

@@ -14,6 +14,50 @@ router.get("/supview", async (req, res) => {
   }
 });
 
+router.get("/viewbyprovince", async (req, res) => {
+  try {
+    const { province } = req.query;
+    const voters = await Voter.find({ province });
+    res.json(voters);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.get("/viewbydistrict", async (req, res) => {
+  try {
+    const { district } = req.query;
+    const voters = await Voter.find({ district });
+    res.json(voters);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.get("/viewbyconstituency", async (req, res) => {
+  try {
+    const { constituency } = req.query;
+    const voters = await Voter.find({ constituency });
+    res.json(voters);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.get("/viewbygender", async (req, res) => {
+  try {
+    const { gender } = req.query;
+    const voters = await Voter.find({ gender });
+    res.json(voters);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 router.get("/subview", async (req, res) => {
   const { districtname } = req.query;
   try {
@@ -139,23 +183,42 @@ router.put("/voter/:id", async (req, res) => {
   }
 });
 
-router.put("/voter/updatevotedmpa", async (req, res) => {
-  const { cnic } = req.body;
+// router.put("/updatevote/:cnic", async (req, res) => {
+//   const { cnic } = req.body;
+//   try {
+//     // Find the voter by CNIC
+//     const voter = await Voter.findOne({ cnic });
+//     if (!voter) {
+//       return res.status(404).json({ error: "Voter not found" });
+//     }
+
+//     // Update votedmpa status to 1
+//     voter.votedmpa = 1;
+//     await voter.save();
+
+//     res.json({ updated: true });
+//   } catch (error) {
+//     console.error("Error updating votedmpa status for voter:", error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
+
+router.post("/updatevotempa", async (req, res) => {
   try {
-    // Find the voter by CNIC
-    const voter = await Voter.findOne({ cnic });
+    const { cnic } = req.body;
+
+    const voter = Voter.findOne({ cnic });
     if (!voter) {
-      return res.status(404).json({ error: "Voter not found" });
+      res.json({
+        alert: "Cnic is not present in database",
+      });
+    } else {
+      voter.votedmpa = 1;
+      await voter.save();
+      return res.json({ updated: true, voter });
     }
-
-    // Update votedmpa status to 1
-    voter.votedmpa = 1;
-    await voter.save();
-
-    res.json({ updated: true });
   } catch (error) {
-    console.error("Error updating votedmpa status for voter:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.json({ alert: "Error Updating Vote" });
   }
 });
 

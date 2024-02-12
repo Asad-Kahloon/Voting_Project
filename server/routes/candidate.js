@@ -14,6 +14,61 @@ router.get("/supview", async (req, res) => {
   }
 });
 
+router.get("/viewbyprovince", async (req, res) => {
+  try {
+    const { province } = req.query;
+    const candidates = await Candidate.find({ province });
+    res.json(candidates);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.get("/viewbydistrict", async (req, res) => {
+  try {
+    const { district } = req.query;
+    const candidates = await Candidate.find({ district });
+    res.json(candidates);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.get("/viewbyconstituency", async (req, res) => {
+  try {
+    const { constituency } = req.query;
+    const candidates = await Candidate.find({ constituency });
+    res.json(candidates);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.get("/viewbygender", async (req, res) => {
+  try {
+    const { gender } = req.query;
+    const candidates = await Candidate.find({ gender });
+    res.json(candidates);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.get("/viewbycategory", async (req, res) => {
+  try {
+    const { category } = req.query;
+    const candidates = await Candidate.find({ category });
+    res.json(candidates);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 router.get("/subview", async (req, res) => {
   const { districtname } = req.query;
   try {
@@ -174,7 +229,7 @@ router.put("/candidate/:id/vote", async (req, res) => {
     }
 
     // Increment the vote count by 1
-    candidate.votes += 1;
+    candidate.votes++;
     await candidate.save();
 
     res.json({ updated: true });

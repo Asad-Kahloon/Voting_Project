@@ -14,6 +14,39 @@ router.get("/view", async (req, res) => {
   }
 });
 
+router.get("/viewbygender", async (req, res) => {
+  try {
+    const { gender } = req.query;
+    const subadmins = await SubAdmin.find({ gender }); // Find subadmins where gender matches
+    res.json(subadmins);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.get("/viewbyprovince", async (req, res) => {
+  try {
+    const { province } = req.query;
+    const subadmins = await SubAdmin.find({ province }); // Find subadmins where province matches
+    res.json(subadmins);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.get("/viewbydistrict", async (req, res) => {
+  try {
+    const { district } = req.query;
+    const subadmins = await SubAdmin.find({ district }); // Find subadmins where province matches
+    res.json(subadmins);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 router.get("/viewby", async (req, res) => {
   const { cnic } = req.query;
   try {

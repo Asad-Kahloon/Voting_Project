@@ -8,13 +8,13 @@ const VotedMPA = () => {
 
   useEffect(() => {
     // Get CNIC from local storage
-    const cnic = localStorage.getItem("currentCNIC");
+    const cnic = localStorage.getItem("current user");
 
     // Check if CNIC and candidate ID are available
     if (cnic && id) {
       // Update votedmpa to 1 in the voter collection
       axios
-        .put("http://localhost:3001/voter", { cnic })
+        .post("http://localhost:3001/voter/updatevotempa", { cnic })
         .then((res) => {
           if (res.data.updated) {
             console.log("Successfully updated votedmpa to 1.");
