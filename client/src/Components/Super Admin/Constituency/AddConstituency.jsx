@@ -41,7 +41,7 @@ const AddConstituency = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3001/constituency/add", {
+      .post("http://localhost:3001/constituency/supadd", {
         constituencyname,
         provincename,
         districtname,

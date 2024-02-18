@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const DeleteVoter = () => {
+const DeleteCandidate = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   useEffect(() => {
@@ -14,4 +14,4 @@ const DeleteVoter = () => {
   }, []);
 };
 
-export default DeleteVoter;
+export default DeleteCandidate;

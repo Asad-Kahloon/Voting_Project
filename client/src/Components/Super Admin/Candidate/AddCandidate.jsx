@@ -101,7 +101,7 @@ const AddCandidate = () => {
     <main className="main-container">
       <div className="login-page">
         <div className="login-container">
-          <h2>Add Voter</h2>
+          <h2>Add Candidate</h2>
           <div className="form-group">
             <label htmlFor="name">Name</label>
             <input
