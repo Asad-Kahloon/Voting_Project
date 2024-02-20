@@ -16,13 +16,13 @@ const AddVoter = () => {
   const [province, setProvince] = useState("");
   const [district, setDistrict] = useState("");
   const [constituency, setConstituency] = useState("");
+  const [image, setImage] = useState(null); // State to store the selected image file
 
   useEffect(() => {
     axios
       .get("http://localhost:3001/province/view")
       .then((res) => {
         setProvinces(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -63,17 +63,27 @@ const AddVoter = () => {
     setConstituency(selectedConstituencyValue);
   };
 
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]); // Capture the selected image file
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("gender", gender);
+    formData.append("cnic", cnic);
+    formData.append("password", password);
+    formData.append("constituency", constituency);
+    formData.append("province", province);
+    formData.append("district", district);
+    formData.append("image", image); // Append the image file to the form data
+
     axios
-      .post("http://localhost:3001/voter/supadd", {
-        name,
-        gender,
-        cnic,
-        password,
-        constituency,
-        province,
-        district,
+      .post("http://localhost:3001/voter/supadd", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then((res) => {
         if (res.data.voter_added) {
@@ -92,6 +102,7 @@ const AddVoter = () => {
           <div className="form-group">
             <label htmlFor="name">Name</label>
             <input
+              required
               type="text"
               placeholder="Enter Name"
               onChange={(e) => setName(e.target.value)}
@@ -100,6 +111,7 @@ const AddVoter = () => {
           <div className="form-group">
             <label htmlFor="gender">Gender</label>
             <select
+              required
               name="gender"
               id="gender"
               onChange={(e) => setGender(e.target.value)}
@@ -112,6 +124,7 @@ const AddVoter = () => {
           <div className="form-group">
             <label htmlFor="cnic">Cnic</label>
             <input
+              required
               type="number"
               placeholder="Enter Cnic without dashes"
               onChange={(e) => setCnic(e.target.value)}
@@ -120,6 +133,7 @@ const AddVoter = () => {
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
+              required
               type="password"
               placeholder="*****"
               onChange={(e) => setPassword(e.target.value)}
@@ -128,6 +142,7 @@ const AddVoter = () => {
           <div className="form-group">
             <label htmlFor="province">Province</label>
             <select
+              required
               name="province"
               id="province"
               onChange={handleProvinceChange}
@@ -145,6 +160,7 @@ const AddVoter = () => {
           <div className="form-group">
             <label htmlFor="district">District</label>
             <select
+              required
               name="district"
               id="district"
               onChange={handleDistrictChange}
@@ -163,6 +179,7 @@ const AddVoter = () => {
           <div className="form-group">
             <label htmlFor="constituency">Constituency</label>
             <select
+              required
               name="constituency"
               id="constituency"
               onChange={handleConstituencyChange}
@@ -180,6 +197,18 @@ const AddVoter = () => {
                   );
                 })}
             </select>
+          </div>
+          {/* Add file input for image upload */}
+          <div className="form-group">
+            <label htmlFor="image">Image</label>
+            <input
+              required
+              type="file"
+              id="image"
+              name="image"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
           </div>
 
           <button className="btn-login" onClick={handleSubmit}>

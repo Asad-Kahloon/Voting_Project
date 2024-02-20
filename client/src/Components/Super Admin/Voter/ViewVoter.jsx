@@ -14,20 +14,21 @@ const ViewVoter = () => {
   const [districts, setDistricts] = useState([]);
   const [constituencies, setConstituencies] = useState([]);
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/voter/supview")
+      .then((res) => {
+        setUsers(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   axios.defaults.withCredentials = true;
   useEffect(() => {
     axios
       .get("http://localhost:3001/province/view")
       .then((res) => {
         setProvinces(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => console.log(err));
-    axios
-      .get("http://localhost:3001/voter/supview")
-      .then((res) => {
-        setUsers(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
 
@@ -35,7 +36,6 @@ const ViewVoter = () => {
       .get("http://localhost:3001/district/view")
       .then((res) => {
         setDistricts(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
 
@@ -43,7 +43,6 @@ const ViewVoter = () => {
       .get("http://localhost:3001/constituency/supview")
       .then((res) => {
         setConstituencies(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -129,7 +128,6 @@ const ViewVoter = () => {
       <Link to="/superadmin/addvoter" className="table-btn">
         Add +
       </Link>
-
       <div className="filter">
         <select
           name="gender"
@@ -187,8 +185,9 @@ const ViewVoter = () => {
         <thead>
           <tr>
             <th>Name</th>
+            <th>Picture</th>
             <th>Gender</th>
-            <th>Cnic</th>
+            <th>CNIC</th>
             <th>Province</th>
             <th>District</th>
             <th>Constituency</th>
@@ -198,8 +197,19 @@ const ViewVoter = () => {
         <tbody>
           {users.length > 0 &&
             users.map((user) => (
-              <tr key={user.id}>
+              <tr key={user._id}>
                 <td>{user.name}</td>
+                <td>
+                  <img
+                    src={`http://localhost:3001/Images/` + user.image}
+                    alt="Voter"
+                    style={{
+                      width: "100PX",
+                      height: "auto",
+                      borderRadius: "10%",
+                    }}
+                  />
+                </td>
                 <td>{user.gender}</td>
                 <td>{user.cnic}</td>
                 <td>{user.province}</td>

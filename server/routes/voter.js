@@ -1,7 +1,20 @@
 import express from "express";
 import bcrypt from "bcrypt";
+import multer from "multer";
 import { Voter } from "../models/Voter.js";
 import { verifySuperAdmin, verifySubAdmin } from "./auth.js";
+
+// Set up multer storage and file upload
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/Images"); // Destination folder for storing uploaded images
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // Use the original filename for storing the image
+  },
+});
+
+const upload = multer({ storage: storage });
 
 const router = express.Router();
 
@@ -91,34 +104,41 @@ router.get("/votercnic", async (req, res) => {
   }
 });
 
-router.post("/supadd", verifySuperAdmin, async (req, res) => {
-  try {
-    const { name, cnic, password, district, gender, province, constituency } =
-      req.body;
-    const vname = await Voter.findOne({ cnic });
-    if (vname) {
-      res.json({ message: "Voter Already Registered" });
-    } else {
-      const hashPassword = await bcrypt.hash(password, 10);
-      const newvoter = new Voter({
-        name,
-        gender,
-        cnic,
-        password: hashPassword,
-        district,
-        province,
-        constituency,
-        role: "voter",
-        votedmna: 0,
-        votedmpa: 0,
-      });
-      await newvoter.save();
-      return res.json({ voter_added: true });
+router.post(
+  "/supadd",
+  verifySuperAdmin,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const { name, cnic, password, district, gender, province, constituency } =
+        req.body;
+      const image = req.file; // Uploaded image file
+      const vname = await Voter.findOne({ cnic });
+      if (vname) {
+        res.json({ message: "Voter Already Registered" });
+      } else {
+        const hashPassword = await bcrypt.hash(password, 10);
+        const newvoter = new Voter({
+          name,
+          gender,
+          cnic,
+          password: hashPassword,
+          district,
+          province,
+          constituency,
+          role: "voter",
+          votedmna: 0,
+          votedmpa: 0,
+          image: image.filename, // Save the filename of the uploaded image to the database
+        });
+        await newvoter.save();
+        return res.json({ voter_added: true });
+      }
+    } catch (error) {
+      return res.json({ message: "Error Creating Voter" });
     }
-  } catch (error) {
-    return res.json({ message: "Error Creating Voter" });
   }
-});
+);
 
 router.post("/subadd", verifySubAdmin, async (req, res) => {
   try {

@@ -10,6 +10,7 @@ const ViewCandidate = () => {
   const [district, setDistrict] = useState("");
   const [category, setCategory] = useState("");
   const [constituency, setConstituency] = useState("");
+  const [party, setParty] = useState("");
 
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -22,14 +23,6 @@ const ViewCandidate = () => {
       .get("http://localhost:3001/province/view")
       .then((res) => {
         setProvinces(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => console.log(err));
-    axios
-      .get("http://localhost:3001/voter/supview")
-      .then((res) => {
-        setUsers(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
 
@@ -37,7 +30,6 @@ const ViewCandidate = () => {
       .get("http://localhost:3001/district/view")
       .then((res) => {
         setDistricts(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
 
@@ -45,18 +37,15 @@ const ViewCandidate = () => {
       .get("http://localhost:3001/constituency/supview")
       .then((res) => {
         setConstituencies(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
 
     axios.get("http://localhost:3001/candidate/supview").then((res) => {
       setUsers(res.data);
-      console.log(res.data);
     });
 
     axios.get("http://localhost:3001/category/view").then((res) => {
       setCategories(res.data);
-      console.log(res.data);
     });
   }, []);
 
@@ -236,11 +225,12 @@ const ViewCandidate = () => {
         <thead>
           <tr>
             <th>Name</th>
+            <th>Symbol</th>
             <th>Gender</th>
             <th>Cnic</th>
-            <th>Symbol</th>
             <th>Votes</th>
             <th>Category</th>
+            <th>Party</th>
             <th>Province</th>
             <th>District</th>
             <th>Constituency</th>
@@ -248,34 +238,44 @@ const ViewCandidate = () => {
           </tr>
         </thead>
         <tbody>
-          {users.length > 0 &&
-            users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.name}</td>
-                <td>{user.gender}</td>
-                <td>{user.cnic}</td>
-                <td>{user.symbol}</td>
-                <td>{user.votes}</td>
-                <td>{user.category}</td>
-                <td>{user.province}</td>
-                <td>{user.district}</td>
-                <td>{user.constituency}</td>
-                <td>
-                  <Link
-                    to={`/superadmin/updatecandidate/${user._id}`}
-                    className="table-btn edit"
-                  >
-                    Edit
-                  </Link>
-                  <Link
-                    to={`/superadmin/deletecandidate/${user._id}`}
-                    className="table-btn delete"
-                  >
-                    Delete
-                  </Link>
-                </td>
-              </tr>
-            ))}
+          {users.map((user) => (
+            <tr key={user.id}>
+              <td>{user.name}</td>
+              <td>
+                <img
+                  src={`http://localhost:3001/Candidates/` + user.symbol}
+                  alt="Candidate"
+                  style={{
+                    width: "100PX",
+                    height: "auto",
+                    borderRadius: "10%",
+                  }}
+                />
+              </td>
+              <td>{user.gender}</td>
+              <td>{user.cnic}</td>
+              <td>{user.votes}</td>
+              <td>{user.category}</td>
+              <td>{user.party}</td>
+              <td>{user.province}</td>
+              <td>{user.district}</td>
+              <td>{user.constituency}</td>
+              <td>
+                <Link
+                  to={`/superadmin/updatecandidate/${user._id}`}
+                  className="table-btn edit"
+                >
+                  Edit
+                </Link>
+                <Link
+                  to={`/superadmin/deletecandidate/${user._id}`}
+                  className="table-btn delete"
+                >
+                  Delete
+                </Link>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </main>

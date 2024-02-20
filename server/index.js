@@ -7,6 +7,7 @@ import { SubAdminRouter } from "./routes/subadmin.js";
 import { VoterRouter } from "./routes/voter.js";
 import { CandidateRouter } from "./routes/candidate.js";
 import { ElectionRouter } from "./routes/election.js";
+import { PartyRouter } from "./routes/party.js";
 import { ProvinceRouter } from "./routes/province.js";
 import { DistrictRouter } from "./routes/district.js";
 import { ConstituencyRouter } from "./routes/constituency.js";
@@ -23,10 +24,12 @@ app.use(
   })
 );
 app.use(cookieParser());
+app.use(express.static("public"));
 
 app.use("/auth", SuperAdminRouter);
 app.use("/subadmin", SubAdminRouter);
 app.use("/election", ElectionRouter);
+app.use("/party", PartyRouter);
 app.use("/province", ProvinceRouter);
 app.use("/district", DistrictRouter);
 app.use("/constituency", ConstituencyRouter);

@@ -14,6 +14,7 @@ const UpdateVoter = () => {
 
   const [name, setName] = useState("");
   const [gender, setGender] = useState("");
+  const [image, setImage] = useState("");
   const [cnic, setCnic] = useState("");
   const [password, setPassword] = useState("");
   const [province, setProvince] = useState("");
@@ -28,9 +29,9 @@ const UpdateVoter = () => {
 
       .then(([proRes, votRes]) => {
         setProvinces(proRes.data);
-        console.log(proRes.data);
 
         setName(votRes.data.name);
+        setImage(votRes.data.image);
         setGender(votRes.data.gender);
         setCnic(votRes.data.cnic);
         setPassword(votRes.data.password);
@@ -91,7 +92,6 @@ const UpdateVoter = () => {
         if (res.data.updated) {
           navigate("/superadmin/viewvoter");
         }
-        console.log(res);
       })
       .catch((err) => console.log(err));
   };
@@ -104,6 +104,7 @@ const UpdateVoter = () => {
           <div className="form-group">
             <label htmlFor="name">Name</label>
             <input
+              required
               type="text"
               value={name}
               placeholder="Enter Name"
@@ -111,8 +112,21 @@ const UpdateVoter = () => {
             />
           </div>
           <div className="form-group">
+            <label htmlFor="picture">Picture</label>
+            <img
+              style={{
+                width: "100PX",
+                height: "auto",
+                borderRadius: "10%",
+              }}
+              src={`http://localhost:3001/Images/` + image}
+              alt="picture"
+            />
+          </div>
+          <div className="form-group">
             <label htmlFor="gender">Gender</label>
             <select
+              required
               value={gender}
               name="gender"
               id="gender"
@@ -126,6 +140,7 @@ const UpdateVoter = () => {
           <div className="form-group">
             <label htmlFor="cnic">Cnic</label>
             <input
+              required
               value={cnic}
               type="number"
               placeholder="Enter Cnic without dashes"
@@ -135,6 +150,7 @@ const UpdateVoter = () => {
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
+              required
               value={password}
               type="password"
               placeholder="*****"
@@ -144,6 +160,7 @@ const UpdateVoter = () => {
           <div className="form-group">
             <label htmlFor="province">Province</label>
             <select
+              required
               value={province}
               name="province"
               id="province"
@@ -162,6 +179,7 @@ const UpdateVoter = () => {
           <div className="form-group">
             <label htmlFor="district">District</label>
             <select
+              required
               value={district}
               name="district"
               id="district"
@@ -181,6 +199,7 @@ const UpdateVoter = () => {
           <div className="form-group">
             <label htmlFor="constituency">Constituency</label>
             <select
+              required
               value={constituency}
               name="constituency"
               id="constituency"

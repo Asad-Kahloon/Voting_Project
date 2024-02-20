@@ -1,9 +1,21 @@
 import express from "express";
+import multer from "multer";
 import { Candidate } from "../models/Candidate.js";
 import { Voter } from "../models/Voter.js";
 import { verifySuperAdmin, verifySubAdmin } from "./auth.js";
 
 const router = express.Router();
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/Candidates"); // Destination folder for storing uploaded images
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // Use the original filename for storing the image
+  },
+});
+
+const upload = multer({ storage: storage });
 
 router.get("/supview", async (req, res) => {
   try {
@@ -118,43 +130,50 @@ router.get("/mnacandidateconstituency", async (req, res) => {
   res.json(mnacandidates);
 });
 
-router.post("/supadd", verifySuperAdmin, async (req, res) => {
-  try {
-    const {
-      name,
-      cnic,
-      province,
-      district,
-      constituency,
-      gender,
-      symbol,
-      category,
-    } = req.body;
-    const vname = await Voter.findOne({ cnic });
-    const cname = await Candidate.findOne({ cnic });
-    if (!vname) {
-      res.json({ message: "first add this user as a voter" });
-    } else if (cname) {
-      res.json({ message: "This Candidate is Already Registered" });
-    } else {
-      const newcandidate = new Candidate({
+router.post(
+  "/supadd",
+  verifySuperAdmin,
+  upload.single("symbol"),
+  async (req, res) => {
+    try {
+      const {
         name,
-        symbol,
-        gender,
         cnic,
-        district,
+        party,
         province,
+        district,
         constituency,
+        gender,
         category,
-        votes: 0,
-      });
-      await newcandidate.save();
-      return res.json({ candidate_added: true });
+      } = req.body;
+      const symbol = req.file;
+      const vname = await Voter.findOne({ cnic });
+      const cname = await Candidate.findOne({ cnic });
+      if (!vname) {
+        res.json({ message: "first add this user as a voter" });
+      } else if (cname) {
+        res.json({ message: "This Candidate is Already Registered" });
+      } else {
+        const newcandidate = new Candidate({
+          name,
+          symbol: symbol.filename,
+          gender,
+          cnic,
+          district,
+          province,
+          party,
+          constituency,
+          category,
+          votes: 0,
+        });
+        await newcandidate.save();
+        return res.json({ candidate_added: true });
+      }
+    } catch (error) {
+      return res.json({ message: "Error Creating Candidate" });
     }
-  } catch (error) {
-    return res.json({ message: "Error Creating Candidate" });
   }
-});
+);
 
 router.post("/subadd", verifySubAdmin, async (req, res) => {
   try {
@@ -165,6 +184,7 @@ router.post("/subadd", verifySubAdmin, async (req, res) => {
       district,
       constituency,
       gender,
+      party,
       symbol,
       category,
     } = req.body;
@@ -183,6 +203,7 @@ router.post("/subadd", verifySubAdmin, async (req, res) => {
         district,
         province,
         constituency,
+        party,
         category,
         votes: 0,
       });
@@ -242,7 +263,7 @@ router.put("/candidate/:id/vote", async (req, res) => {
 router.delete("/delete/:id, verifySuperAdmin", async (req, res) => {
   try {
     const id = req.params.id;
-    const candidate = await Candidate.findByIdAndDelete({ _id: id });
+    const candidate = await Candidate.findByIdAndDelete({ id });
     return res.json({ deleted: true, candidate });
   } catch (error) {
     return res.json(error);

@@ -10,6 +10,9 @@ const candidateSchema = new mongoose.Schema({
   symbol: {
     type: String,
   },
+  party: {
+    type: String,
+  },
   category: {
     type: String,
   },

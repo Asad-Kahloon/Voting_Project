@@ -39,6 +39,10 @@ import ViewVoter from "./Super Admin/Voter/ViewVoter";
 import DeleteVoter from "./Super Admin/Voter/DeleteVoter";
 import UpdateVoter from "./Super Admin/Voter/UpdateVoter";
 
+import AddParty from "./Super Admin/Party/AddParty";
+import ViewParty from "./Super Admin/Party/ViewParty";
+import DeleteParty from "./Super Admin/Party/DeleteParty";
+
 import AddProvince from "./Super Admin/Province/AddProvince";
 import ViewProvince from "./Super Admin/Province/ViewProvince";
 import UpdateProvince from "./Super Admin/Province/UpdateProvince";
@@ -135,6 +139,10 @@ const Rout = () => {
         <Route path="viewvoter" element={<ViewVoter />}></Route>
         <Route path="deletevoter/:id" element={<DeleteVoter />}></Route>
         <Route path="updatevoter/:id" element={<UpdateVoter />}></Route>
+
+        <Route path="addparty" element={<AddParty />}></Route>
+        <Route path="viewparty" element={<ViewParty />}></Route>
+        <Route path="deleteparty/:id" element={<DeleteParty />}></Route>
 
         <Route path="viewprovince" element={<ViewProvince />}></Route>
         <Route path="addprovince" element={<AddProvince />}></Route>

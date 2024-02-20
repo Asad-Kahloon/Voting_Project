@@ -9,15 +9,17 @@ const AddCandidate = () => {
   const [Provinces, setProvinces] = useState([]);
   const [Constituencies, setConstituencies] = useState([]);
   const [Categories, setCategories] = useState([]);
+  const [Parties, setParties] = useState([]);
 
   const [name, setName] = useState("");
   const [gender, setGender] = useState("");
   const [cnic, setCnic] = useState("");
-  const [symbol, setSymbol] = useState("");
+  const [symbol, setSymbol] = useState(null);
   const [category, setCategory] = useState("");
   const [province, setProvince] = useState("");
   const [district, setDistrict] = useState("");
   const [constituency, setConstituency] = useState("");
+  const [party, setParty] = useState("");
 
   useEffect(() => {
     axios
@@ -34,6 +36,16 @@ const AddCandidate = () => {
       .get("http://localhost:3001/category/view")
       .then((res) => {
         setCategories(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/party/view")
+      .then((res) => {
+        setParties(res.data);
         console.log(res.data);
       })
       .catch((err) => console.log(err));
@@ -77,16 +89,23 @@ const AddCandidate = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("gender", gender);
+    formData.append("category", category);
+    formData.append("cnic", cnic);
+    formData.append("constituency", constituency);
+    formData.append("province", province);
+    formData.append("district", district);
+    formData.append("symbol", symbol);
+    formData.append("party", party);
+
     axios
-      .post("http://localhost:3001/candidate/supadd", {
-        name,
-        gender,
-        cnic,
-        symbol,
-        category,
-        constituency,
-        province,
-        district,
+      .post("http://localhost:3001/candidate/supadd", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then((res) => {
         if (res.data.candidate_added) {
@@ -95,6 +114,9 @@ const AddCandidate = () => {
         console.log(res);
       })
       .catch((err) => console.log(err));
+  };
+  const handleSymbolChange = (e) => {
+    setSymbol(e.target.files[0]);
   };
 
   return (
@@ -131,11 +153,11 @@ const AddCandidate = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="passymbol">Symbol</label>
+            <label htmlFor="symbol">Symbol</label>
             <input
-              type="text"
+              type="file"
               placeholder="symbol"
-              onChange={(e) => setSymbol(e.target.value)}
+              onChange={handleSymbolChange}
             />
           </div>
           <div className="form-group">
@@ -156,6 +178,23 @@ const AddCandidate = () => {
             </select>
           </div>
 
+          <div className="form-group">
+            <label htmlFor="party">Party</label>
+            <select
+              name="party"
+              id="party"
+              onChange={(e) => setParty(e.target.value)}
+            >
+              <option value="">Select Party</option>
+              {Parties.map((party) => {
+                return (
+                  <option key={party.id} value={party.name}>
+                    {party.name}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
           <div className="form-group">
             <label htmlFor="province">Province</label>
             <select

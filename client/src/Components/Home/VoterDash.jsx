@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 const VoterDash = () => {
   const [username, setUserName] = useState("");
+  const [userconstituency, setUserConstituency] = useState("");
   const [candidates, setCandidates] = useState([]);
   const [error, setError] = useState("");
 
@@ -20,6 +21,7 @@ const VoterDash = () => {
 
         // Set username from voter data
         setUserName(voterName);
+        setUserConstituency(voterConstituency);
 
         // Make GET request to fetch candidates based on constituency
         axios
@@ -46,6 +48,9 @@ const VoterDash = () => {
   return (
     <div className="voter">
       <div>{error ? <h1>Error: {error}</h1> : <h1>Welcome {username}</h1>}</div>
+      <div>
+        Total Voters in your area {userconstituency} : <b>{}</b>
+      </div>
       <div className="voter-table">
         <table>
           <thead>

@@ -7,6 +7,9 @@ const voterSchema = new mongoose.Schema({
   gender: {
     type: String,
   },
+  image: {
+    type: String,
+  },
   cnic: {
     type: String,
     required: true,
