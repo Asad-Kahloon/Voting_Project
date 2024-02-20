@@ -13,6 +13,7 @@ import VoterDash from "./Home/VoterDash";
 import VoterBallot from "./Home/VoterBallot";
 
 import VotedMPA from "./Home/VotedMPA";
+import VotedMNA from "./Home/VotedMNA";
 
 // Super Admin Start
 
@@ -115,6 +116,7 @@ const Rout = () => {
         <Route path="voterdash" element={<VoterDash />}></Route>
         <Route path="ballot" element={<VoterBallot />}></Route>
         <Route path="votedmpa/:id" element={<VotedMPA />}></Route>
+        <Route path="votedmna/:id" element={<VotedMNA />}></Route>
       </Route>
 
       <Route path="/superadmin" element={<SuperAdmin_Interface role={role} />}>

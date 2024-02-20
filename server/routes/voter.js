@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import multer from "multer";
 import { Voter } from "../models/Voter.js";
 import { verifySuperAdmin, verifySubAdmin } from "./auth.js";
+import { Candidate } from "../models/Candidate.js";
 
 // Set up multer storage and file upload
 const storage = multer.diskStorage({
@@ -22,6 +23,48 @@ router.get("/supview", async (req, res) => {
   try {
     const voters = await Voter.find();
     return res.json(voters);
+  } catch (error) {
+    return res.json(error);
+  }
+});
+
+router.get("/totalvoter", async (req, res) => {
+  try {
+    const { cnic } = req.query;
+    const vname = await Voter.findOne({ cnic });
+    if (vname) {
+      const constituency = vname.constituency;
+
+      const mpa = await Candidate.countDocuments({
+        constituency,
+        category: "MPA",
+      });
+      const mna = await Candidate.countDocuments({
+        constituency,
+        category: "MNA",
+      });
+
+      const allvoter = await Voter.countDocuments({
+        constituency,
+      });
+      const malevoter = await Voter.countDocuments({
+        gender: "male",
+        constituency,
+      });
+      const femalevoter = await Voter.countDocuments({
+        gender: "female",
+        constituency,
+      });
+      return res.json({
+        ok: true,
+        allvoter,
+        malevoter,
+        femalevoter,
+        mna,
+        mpa,
+        message: "voter count",
+      });
+    }
   } catch (error) {
     return res.json(error);
   }

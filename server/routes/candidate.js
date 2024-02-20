@@ -240,11 +240,51 @@ router.put("/candidate/:id", async (req, res) => {
   }
 });
 
-router.put("/candidate/:id/vote", async (req, res) => {
+router.put("/updatecandidatevoteandvotervotemna/:id", async (req, res) => {
   const { id } = req.params;
+  const { cnic } = req.query;
+
   try {
+    // Find the voter by CNIC
+    const voter = await Voter.findOne({ cnic });
+    if (!voter) {
+      return res.status(404).json({ error: "Voter not found" });
+    }
+
+    // Increment voted MNA count for the voter
+    voter.votedmna++;
+    await voter.save();
+
     // Find the candidate by ID
     const candidate = await Candidate.findById(id);
+    if (!candidate) {
+      return res.status(404).json({ error: "Candidate not found" });
+    }
+
+    // Increment the vote count for the candidate
+    candidate.votes++;
+    await candidate.save();
+
+    res.json({ updated: true });
+  } catch (error) {
+    console.error("Error updating candidate vote count:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.put("/updatecandidatevoteandvotervotempa/:id", async (req, res) => {
+  const { id } = req.params;
+  const { cnic } = req.query;
+  try {
+    const vname = await Voter.findOne({ cnic });
+    if (!vname) {
+      res.json({ message: "error no voter found" });
+    } else {
+      vname.votedmpa++;
+      vname.save();
+    }
+    // Find the candidate by ID
+    const candidate = await Candidate.findById({ _id: id });
     if (!candidate) {
       return res.status(404).json({ error: "Candidate not found" });
     }
@@ -260,10 +300,10 @@ router.put("/candidate/:id/vote", async (req, res) => {
   }
 });
 
-router.delete("/delete/:id, verifySuperAdmin", async (req, res) => {
+router.delete("/supdelete/:id", verifySuperAdmin, async (req, res) => {
   try {
     const id = req.params.id;
-    const candidate = await Candidate.findByIdAndDelete({ id });
+    const candidate = await Candidate.findByIdAndDelete({ _id: id });
     return res.json({ deleted: true, candidate });
   } catch (error) {
     return res.json(error);

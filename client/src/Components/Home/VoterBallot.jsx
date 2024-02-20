@@ -74,7 +74,17 @@ const VoterBallot = () => {
                 {mpas.map((mpa) => (
                   <tr key={mpa._id}>
                     <td>{mpa.name}</td>
-                    <td>{mpa.symbol}</td>
+                    <td>
+                      <img
+                        src={`http://localhost:3001/Candidates/` + mpa.symbol}
+                        alt="symbol"
+                        style={{
+                          width: "100PX",
+                          height: "auto",
+                          borderRadius: "10%",
+                        }}
+                      />
+                    </td>
                     <td>{mpa.cnic}</td>
                     <td>{mpa.votes}</td>
                     <td>
@@ -111,14 +121,24 @@ const VoterBallot = () => {
               </thead>
               <tbody>
                 {mnas.map((mna) => (
-                  <tr key={mna.id}>
+                  <tr key={mna._id}>
                     <td>{mna.name}</td>
-                    <td>{mna.symbol}</td>
+                    <td>
+                      <img
+                        src={`http://localhost:3001/Candidates/` + mna.symbol}
+                        alt="symbol"
+                        style={{
+                          width: "100PX",
+                          height: "auto",
+                          borderRadius: "10%",
+                        }}
+                      />
+                    </td>
                     <td>{mna.cnic}</td>
                     <td>{mna.votes}</td>
                     <td>
                       <Link
-                        to={`/voter/votedmna/${mna._id}`}
+                        to={`/votedmna/${mna._id}`}
                         className="btn-login edit link"
                       >
                         Vote

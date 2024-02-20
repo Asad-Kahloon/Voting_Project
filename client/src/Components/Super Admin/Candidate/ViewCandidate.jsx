@@ -10,7 +10,6 @@ const ViewCandidate = () => {
   const [district, setDistrict] = useState("");
   const [category, setCategory] = useState("");
   const [constituency, setConstituency] = useState("");
-  const [party, setParty] = useState("");
 
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -239,7 +238,7 @@ const ViewCandidate = () => {
         </thead>
         <tbody>
           {users.map((user) => (
-            <tr key={user.id}>
+            <tr key={user._id}>
               <td>{user.name}</td>
               <td>
                 <img
@@ -262,7 +261,7 @@ const ViewCandidate = () => {
               <td>{user.constituency}</td>
               <td>
                 <Link
-                  to={`/superadmin/updatecandidate/${user._id}`}
+                  to={`/superadmin/updatecandidate/` + user._id}
                   className="table-btn edit"
                 >
                   Edit

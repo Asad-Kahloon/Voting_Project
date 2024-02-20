@@ -5,8 +5,13 @@ import { Link } from "react-router-dom";
 const VoterDash = () => {
   const [username, setUserName] = useState("");
   const [userconstituency, setUserConstituency] = useState("");
+  const [femalevoter, setFemaleVoter] = useState("");
+  const [malevoter, setMaleVoter] = useState("");
+  const [allvoter, setAllVoter] = useState("");
   const [candidates, setCandidates] = useState([]);
   const [error, setError] = useState("");
+  const [mpa, setMpa] = useState("");
+  const [mna, setMna] = useState("");
 
   useEffect(() => {
     // Fetch CNIC from local storage
@@ -45,12 +50,39 @@ const VoterDash = () => {
       });
   }, []);
 
+  useEffect(() => {
+    const cnic = JSON.parse(localStorage.getItem("current user"));
+    console.log(cnic);
+    axios
+      .get(`http://localhost:3001/voter/totalvoter?cnic=${cnic}`)
+      .then((res) => {
+        setAllVoter(res.data.allvoter);
+        setMaleVoter(res.data.malevoter);
+        setFemaleVoter(res.data.femalevoter);
+        setMna(res.data.mna);
+        setMpa(res.data.mpa);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <div className="voter">
       <div>{error ? <h1>Error: {error}</h1> : <h1>Welcome {username}</h1>}</div>
-      <div>
-        Total Voters in your area {userconstituency} : <b>{}</b>
-      </div>
+      <span>
+        Total Voters in your area {userconstituency} : <b>{allvoter}</b>
+      </span>
+      <span>
+        Total Female Voters in {userconstituency} : <b>{femalevoter}</b>
+      </span>
+      <span>
+        Total Male Voters in {userconstituency} : <b>{malevoter}</b>
+      </span>
+      <span>
+        Total MPA in {userconstituency} : <b>{mpa}</b>
+      </span>
+      <span>
+        Total MNA in {userconstituency} : <b>{mna}</b>
+      </span>
       <div className="voter-table">
         <table>
           <thead>
@@ -64,9 +96,19 @@ const VoterDash = () => {
           </thead>
           <tbody>
             {candidates.map((candidate) => (
-              <tr key={candidate.id}>
+              <tr key={candidate._id}>
                 <td>{candidate.name}</td>
-                <td>{candidate.symbol}</td>
+                <td>
+                  <img
+                    src={`http://localhost:3001/Candidates/` + candidate.symbol}
+                    alt="symbol"
+                    style={{
+                      width: "100PX",
+                      height: "auto",
+                      borderRadius: "10%",
+                    }}
+                  />
+                </td>
                 <td>{candidate.category}</td>
                 <td>{candidate.cnic}</td>
                 <td>{candidate.votes}</td>
