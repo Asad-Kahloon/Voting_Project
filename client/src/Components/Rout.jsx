@@ -18,6 +18,7 @@ import VotedMNA from "./Home/VotedMNA";
 // Super Admin Start
 
 import SuperAdmin_Interface from "./Super Admin/SuperAdmin_Interface";
+import WebCam from "./Super Admin/takephoto/webcam";
 import SuperDashboard from "./Super Admin/SuperDashboard";
 
 import ViewElection from "./Super Admin/Election/ViewElection";
@@ -68,6 +69,7 @@ import DeleteCategory from "./Super Admin/Category/DeleteCategory";
 // Sub Admin Start
 
 import SubAdmin_Interface from "./Sub Admin/SubAdmin_Interface";
+import WeCam from "./Sub Admin/takephoto/webcam";
 import SubDashboard from "./Sub Admin/SubDashboard";
 
 import AddSubConstituency from "./Sub Admin/Constituency/AddSubConstituency";
@@ -101,7 +103,6 @@ const Rout = () => {
         } else {
           setRole("");
         }
-        console.log(res);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -120,7 +121,8 @@ const Rout = () => {
       </Route>
 
       <Route path="/superadmin" element={<SuperAdmin_Interface role={role} />}>
-        <Route index element={<SuperDashboard />}></Route>
+        <Route index element={<WebCam />}></Route>
+        <Route path="dashboard" element={<SuperDashboard />}></Route>
 
         <Route path="viewelection" element={<ViewElection />}></Route>
         <Route path="createelection" element={<CreateElection />}></Route>
@@ -173,7 +175,9 @@ const Rout = () => {
       </Route>
 
       <Route path="/subadmin" element={<SubAdmin_Interface role={role} />}>
-        <Route index element={<SubDashboard />}></Route>
+        <Route index element={<WeCam />}></Route>
+
+        <Route path="dashboard" element={<SubDashboard />}></Route>
 
         <Route path="addconstituency" element={<AddSubConstituency />}></Route>
         <Route
