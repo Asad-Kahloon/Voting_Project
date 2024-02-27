@@ -7,6 +7,9 @@ const candidateSchema = new mongoose.Schema({
   gender: {
     type: String,
   },
+  image: {
+    type: String,
+  },
   symbol: {
     type: String,
   },

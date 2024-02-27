@@ -68,26 +68,80 @@ const VoterDash = () => {
   return (
     <div className="voter">
       <div>{error ? <h1>Error: {error}</h1> : <h1>Welcome {username}</h1>}</div>
-      <span>
-        Total Voters in your area {userconstituency} : <b>{allvoter}</b>
-      </span>
-      <span>
-        Total Female Voters in {userconstituency} : <b>{femalevoter}</b>
-      </span>
-      <span>
-        Total Male Voters in {userconstituency} : <b>{malevoter}</b>
-      </span>
-      <span>
-        Total MPA in {userconstituency} : <b>{mpa}</b>
-      </span>
-      <span>
-        Total MNA in {userconstituency} : <b>{mna}</b>
-      </span>
-      <div className="voter-table">
+      <div
+        style={{
+          fontWeight: "600",
+          fontSize: "30px",
+        }}
+      >
+        Constituency : {userconstituency}
+      </div>
+      <div
+        style={{
+          marginTop: "2vh",
+          display: "flex",
+          width: "100%",
+          color: "#fff",
+          justifyContent: "space-evenly",
+        }}
+      >
+        <span
+          style={{
+            backgroundColor: "#4caf50",
+            padding: "10px 20px",
+            borderRadius: "10px",
+          }}
+        >
+          Total Voters : <b>{allvoter}</b>
+        </span>
+        <span
+          style={{
+            backgroundColor: "#4caf50",
+            padding: "10px 20px",
+            borderRadius: "10px",
+          }}
+        >
+          Female Voters : <b>{femalevoter}</b>
+        </span>
+        <span
+          style={{
+            backgroundColor: "#4caf50",
+            padding: "10px 20px",
+            borderRadius: "10px",
+          }}
+        >
+          Male Voters : <b>{malevoter}</b>
+        </span>
+        <span
+          style={{
+            backgroundColor: "#4caf50",
+            padding: "10px 20px",
+            borderRadius: "10px",
+          }}
+        >
+          MPA Candidates : <b>{mpa}</b>
+        </span>
+        <span
+          style={{
+            backgroundColor: "#4caf50",
+            padding: "10px 20px",
+            borderRadius: "10px",
+          }}
+        >
+          MNA Candidates : <b>{mna}</b>
+        </span>
+      </div>
+      <div
+        className="voter-table"
+        style={{
+          marginTop: "3vh",
+        }}
+      >
         <table>
           <thead>
             <tr>
               <th>Candidate</th>
+              <th>Image</th>
               <th>Symbol</th>
               <th>Category</th>
               <th>CNIC</th>
@@ -98,6 +152,17 @@ const VoterDash = () => {
             {candidates.map((candidate) => (
               <tr key={candidate._id}>
                 <td>{candidate.name}</td>
+                <td>
+                  <img
+                    src={`http://localhost:3001/Images/` + candidate.image}
+                    alt="symbol"
+                    style={{
+                      width: "100PX",
+                      height: "auto",
+                      borderRadius: "10%",
+                    }}
+                  />
+                </td>
                 <td>
                   <img
                     src={`http://localhost:3001/Candidates/` + candidate.symbol}

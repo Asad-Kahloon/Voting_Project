@@ -55,7 +55,7 @@ const VoterBallot = () => {
   return (
     <div className="voter-ballot">
       <div className="ballot mpa-ballot">
-        {votedMPA ? (
+        {votedMPA != 0 ? (
           <h2>You have already voted for an MPA Candidate</h2>
         ) : (
           <>
@@ -64,6 +64,7 @@ const VoterBallot = () => {
               <thead>
                 <tr>
                   <th>Name</th>
+                  <th>Picture</th>
                   <th>Symbol</th>
                   <th>CNIC</th>
                   <th>Votes</th>
@@ -74,6 +75,17 @@ const VoterBallot = () => {
                 {mpas.map((mpa) => (
                   <tr key={mpa._id}>
                     <td>{mpa.name}</td>
+                    <td>
+                      <img
+                        src={`http://localhost:3001/Images/` + mpa.symbol}
+                        alt="symbol"
+                        style={{
+                          width: "100PX",
+                          height: "auto",
+                          borderRadius: "10%",
+                        }}
+                      />
+                    </td>
                     <td>
                       <img
                         src={`http://localhost:3001/Candidates/` + mpa.symbol}
@@ -104,7 +116,7 @@ const VoterBallot = () => {
       </div>
 
       <div className="ballot mna-ballot">
-        {votedMNA ? (
+        {votedMNA != 0 ? (
           <h2>You have already voted for an MNA Candidate</h2>
         ) : (
           <>
@@ -113,6 +125,7 @@ const VoterBallot = () => {
               <thead>
                 <tr>
                   <th>Name</th>
+                  <th>Picture</th>
                   <th>Symbol</th>
                   <th>CNIC</th>
                   <th>Votes</th>
@@ -123,6 +136,17 @@ const VoterBallot = () => {
                 {mnas.map((mna) => (
                   <tr key={mna._id}>
                     <td>{mna.name}</td>
+                    <td>
+                      <img
+                        src={`http://localhost:3001/Images/` + mna.image}
+                        alt="symbol"
+                        style={{
+                          width: "100PX",
+                          height: "auto",
+                          borderRadius: "10%",
+                        }}
+                      />
+                    </td>
                     <td>
                       <img
                         src={`http://localhost:3001/Candidates/` + mna.symbol}

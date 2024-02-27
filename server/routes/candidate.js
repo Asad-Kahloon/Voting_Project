@@ -151,23 +151,27 @@ router.post(
       const cname = await Candidate.findOne({ cnic });
       if (!vname) {
         res.json({ message: "first add this user as a voter" });
-      } else if (cname) {
-        res.json({ message: "This Candidate is Already Registered" });
-      } else {
-        const newcandidate = new Candidate({
-          name,
-          symbol: symbol.filename,
-          gender,
-          cnic,
-          district,
-          province,
-          party,
-          constituency,
-          category,
-          votes: 0,
-        });
-        await newcandidate.save();
-        return res.json({ candidate_added: true });
+      } else if (vname) {
+        const cimage = vname.image;
+        if (cname) {
+          res.json({ message: "This Candidate is Already Registered" });
+        } else {
+          const newcandidate = new Candidate({
+            name,
+            symbol: symbol.filename,
+            gender,
+            cnic,
+            district,
+            province,
+            image: cimage,
+            party,
+            constituency,
+            category,
+            votes: 0,
+          });
+          await newcandidate.save();
+          return res.json({ candidate_added: true });
+        }
       }
     } catch (error) {
       return res.json({ message: "Error Creating Candidate" });
@@ -237,6 +241,21 @@ router.put("/candidate/:id", async (req, res) => {
     return res.json({ updated: true, candidate });
   } catch (error) {
     return res.json(error);
+  }
+});
+
+router.put("/votes/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const candidate = await Candidate.findByIdAndUpdate(
+      { _id: id },
+      { $inc: { votes: 0.5 } },
+      { new: true }
+    );
+
+    return res.json({ updated: true, candidate });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 });
 

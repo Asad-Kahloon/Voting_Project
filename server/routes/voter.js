@@ -246,26 +246,6 @@ router.put("/voter/:id", async (req, res) => {
   }
 });
 
-// router.put("/updatevote/:cnic", async (req, res) => {
-//   const { cnic } = req.body;
-//   try {
-//     // Find the voter by CNIC
-//     const voter = await Voter.findOne({ cnic });
-//     if (!voter) {
-//       return res.status(404).json({ error: "Voter not found" });
-//     }
-
-//     // Update votedmpa status to 1
-//     voter.votedmpa = 1;
-//     await voter.save();
-
-//     res.json({ updated: true });
-//   } catch (error) {
-//     console.error("Error updating votedmpa status for voter:", error);
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// });
-
 router.post("/updatevotempa", async (req, res) => {
   try {
     const { cnic } = req.body;
@@ -282,6 +262,21 @@ router.post("/updatevotempa", async (req, res) => {
     }
   } catch (error) {
     res.json({ alert: "Error Updating Vote" });
+  }
+});
+
+router.put("/votedmna", async (req, res) => {
+  try {
+    const cnic = req.query.cnic;
+    const voter = await Voter.findOneAndUpdate(
+      { cnic },
+      { $inc: { votedmna: 0.5 } },
+      { new: true }
+    );
+
+    return res.json({ updated: true, voter });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 });
 

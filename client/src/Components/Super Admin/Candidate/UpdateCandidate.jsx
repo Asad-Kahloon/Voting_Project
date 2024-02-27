@@ -27,7 +27,6 @@ const UpdateCandidate = () => {
       .get("http://localhost:3001/category/view")
       .then((res) => {
         setCategories(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -41,7 +40,6 @@ const UpdateCandidate = () => {
 
       .then(([proRes, catRes, canRes]) => {
         setProvinces(proRes.data);
-        console.log(proRes.data);
 
         setCategories(catRes.data);
 

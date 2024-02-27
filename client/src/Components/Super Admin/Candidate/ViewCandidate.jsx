@@ -224,6 +224,7 @@ const ViewCandidate = () => {
         <thead>
           <tr>
             <th>Name</th>
+            <th>Image</th>
             <th>Symbol</th>
             <th>Gender</th>
             <th>Cnic</th>
@@ -242,8 +243,19 @@ const ViewCandidate = () => {
               <td>{user.name}</td>
               <td>
                 <img
-                  src={`http://localhost:3001/Candidates/` + user.symbol}
+                  src={`http://localhost:3001/Images/` + user.image}
                   alt="Candidate"
+                  style={{
+                    width: "100PX",
+                    height: "auto",
+                    borderRadius: "10%",
+                  }}
+                />
+              </td>
+              <td>
+                <img
+                  src={`http://localhost:3001/Candidates/` + user.symbol}
+                  alt="Symbol"
                   style={{
                     width: "100PX",
                     height: "auto",
