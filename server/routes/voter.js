@@ -280,6 +280,21 @@ router.put("/votedmna", async (req, res) => {
   }
 });
 
+router.put("/votedmpa", async (req, res) => {
+  try {
+    const cnic = req.query.cnic;
+    const voter = await Voter.findOneAndUpdate(
+      { cnic },
+      { $inc: { votedmpa: 0.5 } },
+      { new: true }
+    );
+
+    return res.json({ updated: true, voter });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
 router.delete("/delete/:id", verifySuperAdmin, async (req, res) => {
   try {
     const id = req.params.id;
