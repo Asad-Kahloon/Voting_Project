@@ -52,19 +52,23 @@ const UpdateConstituency = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .put("http://localhost:3001/constituency/supconstituency/" + id, {
-        constituencyname,
-        provincename,
-        districtname,
-      })
-      .then((res) => {
-        if (res.data.updated) {
-          navigate("/superadmin/viewconstituency");
-        }
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
+    if (!constituencyname || !provincename || !districtname) {
+      alert("please fill out all the fields");
+    } else {
+      axios
+        .put("http://localhost:3001/constituency/supconstituency/" + id, {
+          constituencyname,
+          provincename,
+          districtname,
+        })
+        .then((res) => {
+          if (res.data.updated) {
+            navigate("/superadmin/viewconstituency");
+          }
+          console.log(res);
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   return (

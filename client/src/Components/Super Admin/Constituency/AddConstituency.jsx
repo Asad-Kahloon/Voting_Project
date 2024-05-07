@@ -40,19 +40,23 @@ const AddConstituency = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:3001/constituency/supadd", {
-        constituencyname,
-        provincename,
-        districtname,
-      })
-      .then((res) => {
-        if (res.data.constituency_added) {
-          navigate("/superadmin/viewconstituency");
-        }
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
+    if (!constituencyname || !provincename || !districtname) {
+      alert("please fill out all the field");
+    } else {
+      axios
+        .post("http://localhost:3001/constituency/supadd", {
+          constituencyname,
+          provincename,
+          districtname,
+        })
+        .then((res) => {
+          if (res.data.constituency_added) {
+            navigate("/superadmin/viewconstituency");
+          }
+          console.log(res);
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   return (

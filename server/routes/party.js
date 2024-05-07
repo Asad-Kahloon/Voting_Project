@@ -31,4 +31,14 @@ router.post("/add", verifySuperAdmin, async (req, res) => {
   }
 });
 
+router.delete("/delete/:id", verifySuperAdmin, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const party = await Party.findByIdAndDelete({ _id: id });
+    return res.json({ deleted: true, party });
+  } catch (error) {
+    return res.json(error);
+  }
+});
+
 export { router as PartyRouter };

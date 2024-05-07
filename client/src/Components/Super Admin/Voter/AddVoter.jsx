@@ -79,19 +79,33 @@ const AddVoter = () => {
     formData.append("district", district);
     formData.append("image", image); // Append the image file to the form data
 
-    axios
-      .post("http://localhost:3001/voter/supadd", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        if (res.data.voter_added) {
-          navigate("/superadmin/viewvoter");
-        }
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
+    if (
+      !name ||
+      !gender ||
+      !cnic ||
+      !password ||
+      !constituency ||
+      !province ||
+      !district ||
+      !image
+    ) {
+      alert("Please fill out all the fields ");
+    } else {
+      axios
+        .post("http://localhost:3001/voter/supadd", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          if (res.data.voter_added) {
+            navigate("/superadmin/viewvoter");
+          } else if (res.data.voter_cnic) {
+            alert(res.data.message);
+          }
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   return (

@@ -29,10 +29,10 @@ const voterSchema = new mongoose.Schema({
     type: String,
   },
   votedmna: {
-    type: Number,
+    type: Boolean,
   },
   votedmpa: {
-    type: Number,
+    type: Boolean,
   },
 });
 

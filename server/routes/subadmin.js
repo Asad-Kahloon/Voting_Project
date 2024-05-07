@@ -63,8 +63,17 @@ router.post("/add", verifySuperAdmin, async (req, res) => {
   try {
     const { name, cnic, password, district, gender, province } = req.body;
     const subname = await SubAdmin.findOne({ cnic });
+    const subdist = await SubAdmin.findOne({ district });
     if (subname) {
-      res.json({ message: "Sub Admin Already Registered" });
+      return res.json({
+        subadmin_cnic: true,
+        message: "Sub Admin Already Registered",
+      });
+    } else if (subdist) {
+      return res.json({
+        subadmin_dist: true,
+        message: "Subadmin Already existed in the district",
+      });
     } else {
       const hashPassword = await bcrypt.hash(password, 10);
       const newsubadmin = new SubAdmin({

@@ -54,12 +54,27 @@ const VoterBallot = () => {
 
   return (
     <div className="voter-ballot">
+      <Link
+        to={`/voterdash`}
+        className="btn-login edit link"
+        style={{
+          width: "100px",
+          textAlign: "center",
+        }}
+      >
+        Back
+      </Link>
       <div className="ballot mpa-ballot">
-        {votedMPA != 0 ? (
-          <h2>You have already voted for an MPA Candidate</h2>
+        {votedMPA ? (
+          <>
+            <h5>
+              <strong>CNIC : </strong> 34602-4242018-9
+            </h5>
+            <h2>Voted MPA</h2>
+          </>
         ) : (
           <>
-            <h2>MPA Candidates</h2>
+            <h2>MPA Candidates Ballot Paper</h2>
             <table className="ballot-table">
               <thead>
                 <tr>
@@ -77,7 +92,7 @@ const VoterBallot = () => {
                     <td>{mpa.name}</td>
                     <td>
                       <img
-                        src={`http://localhost:3001/Images/` + mpa.symbol}
+                        src={`http://localhost:3001/Images/` + mpa.image}
                         alt="symbol"
                         style={{
                           width: "100PX",
@@ -116,11 +131,16 @@ const VoterBallot = () => {
       </div>
 
       <div className="ballot mna-ballot">
-        {votedMNA != 0 ? (
-          <h2>You have already voted for an MNA Candidate</h2>
+        {votedMNA ? (
+          <>
+            <h5>
+              <strong>CNIC : </strong> 34602-4242018-9
+            </h5>
+            <h2>Voted MNA</h2>
+          </>
         ) : (
           <>
-            <h2>MNA Candidates</h2>
+            <h2>MNA Candidates Ballot Paper</h2>
             <table className="ballot-table">
               <thead>
                 <tr>

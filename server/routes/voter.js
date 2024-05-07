@@ -114,6 +114,21 @@ router.get("/viewbygender", async (req, res) => {
   }
 });
 
+router.get("/search", async (req, res) => {
+  try {
+    const { cnic } = req.query;
+    const voter = await Voter.findOne({ cnic });
+    if (voter) {
+      return res.json({ voter_found: true, voter });
+    } else {
+      return res.json({ voter_found: false, message: "" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 router.get("/subview", async (req, res) => {
   const { districtname } = req.query;
   try {
@@ -158,7 +173,7 @@ router.post(
       const image = req.file; // Uploaded image file
       const vname = await Voter.findOne({ cnic });
       if (vname) {
-        res.json({ message: "Voter Already Registered" });
+        res.json({ voter_cnic: true, message: "Voter Already Registered" });
       } else {
         const hashPassword = await bcrypt.hash(password, 10);
         const newvoter = new Voter({
@@ -172,7 +187,7 @@ router.post(
           role: "voter",
           votedmna: 0,
           votedmpa: 0,
-          image: image.filename, // Save the filename of the uploaded image to the database
+          image: image.filename,
         });
         await newvoter.save();
         return res.json({ voter_added: true });
@@ -246,33 +261,20 @@ router.put("/voter/:id", async (req, res) => {
   }
 });
 
-router.post("/updatevotempa", async (req, res) => {
+router.patch("/votedmna", async (req, res) => {
   try {
-    const { cnic } = req.body;
+    const cnic = req.query.cnic; // Assuming cnic is used to identify the specific voter
 
-    const voter = Voter.findOne({ cnic });
-    if (!voter) {
-      res.json({
-        alert: "Cnic is not present in database",
-      });
-    } else {
-      voter.votedmpa = 1;
-      await voter.save();
-      return res.json({ updated: true, voter });
-    }
-  } catch (error) {
-    res.json({ alert: "Error Updating Vote" });
-  }
-});
-
-router.put("/votedmna", async (req, res) => {
-  try {
-    const cnic = req.query.cnic;
+    // Find the voter by their CNIC and update the votedmpa field to true
     const voter = await Voter.findOneAndUpdate(
-      { cnic },
-      { $inc: { votedmna: 0.5 } },
-      { new: true }
+      { cnic: cnic },
+      { votedmna: true }
     );
+
+    if (!voter) {
+      // If no voter found with the given CNIC
+      return res.status(404).json({ error: "Voter not found" });
+    }
 
     return res.json({ updated: true, voter });
   } catch (error) {
@@ -280,14 +282,20 @@ router.put("/votedmna", async (req, res) => {
   }
 });
 
-router.put("/votedmpa", async (req, res) => {
+router.patch("/votedmpa", async (req, res) => {
   try {
-    const cnic = req.query.cnic;
+    const cnic = req.query.cnic; // Assuming cnic is used to identify the specific voter
+
+    // Find the voter by their CNIC and update the votedmpa field to true
     const voter = await Voter.findOneAndUpdate(
-      { cnic },
-      { $inc: { votedmpa: 0.5 } },
-      { new: true }
+      { cnic: cnic },
+      { votedmpa: true }
     );
+
+    if (!voter) {
+      // If no voter found with the given CNIC
+      return res.status(404).json({ error: "Voter not found" });
+    }
 
     return res.json({ updated: true, voter });
   } catch (error) {

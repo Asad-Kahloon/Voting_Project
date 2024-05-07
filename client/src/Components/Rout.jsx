@@ -4,6 +4,9 @@ import axios from "axios";
 
 // Home Start
 
+import WebCam from "./takephoto/webcam";
+import Form45 from "./Home/Form45";
+
 import Home_Interface from "./Home/Home_Interface";
 import Home from "./Home/Home";
 import Login from "./Home/Login";
@@ -18,7 +21,6 @@ import VotedMNA from "./Home/VotedMNA";
 // Super Admin Start
 
 import SuperAdmin_Interface from "./Super Admin/SuperAdmin_Interface";
-import WebCam from "./Super Admin/takephoto/webcam";
 import SuperDashboard from "./Super Admin/SuperDashboard";
 
 import ViewElection from "./Super Admin/Election/ViewElection";
@@ -69,7 +71,6 @@ import DeleteCategory from "./Super Admin/Category/DeleteCategory";
 // Sub Admin Start
 
 import SubAdmin_Interface from "./Sub Admin/SubAdmin_Interface";
-import WeCam from "./Sub Admin/takephoto/webcam";
 import SubDashboard from "./Sub Admin/SubDashboard";
 
 import AddSubConstituency from "./Sub Admin/Constituency/AddSubConstituency";
@@ -113,6 +114,7 @@ const Rout = () => {
         <Route index element={<Home />}></Route>
         <Route path="login" element={<Login setRoleVar={setRole} />}></Route>
         <Route path="logout" element={<Logout setRole={setRole} />}></Route>
+        <Route path="camera" element={<WebCam role={role} />}></Route>
 
         <Route path="voterdash" element={<VoterDash />}></Route>
         <Route path="ballot" element={<VoterBallot />}></Route>
@@ -121,8 +123,7 @@ const Rout = () => {
       </Route>
 
       <Route path="/superadmin" element={<SuperAdmin_Interface role={role} />}>
-        <Route index element={<WebCam />}></Route>
-        <Route path="dashboard" element={<SuperDashboard />}></Route>
+        <Route index element={<SuperDashboard />}></Route>
 
         <Route path="viewelection" element={<ViewElection />}></Route>
         <Route path="createelection" element={<CreateElection />}></Route>
@@ -164,6 +165,8 @@ const Rout = () => {
           path="deleteconstituency/:id"
           element={<DeleteConstituency />}
         ></Route>
+        <Route path="/superadmin/form45/:id" element={<Form45 />} />
+
         <Route
           path="updateconstituency/:id"
           element={<UpdateConstituency />}
@@ -175,9 +178,7 @@ const Rout = () => {
       </Route>
 
       <Route path="/subadmin" element={<SubAdmin_Interface role={role} />}>
-        <Route index element={<WeCam />}></Route>
-
-        <Route path="dashboard" element={<SubDashboard />}></Route>
+        <Route index element={<SubDashboard />}></Route>
 
         <Route path="addconstituency" element={<AddSubConstituency />}></Route>
         <Route
@@ -188,6 +189,7 @@ const Rout = () => {
           path="deleteconstituency/:id"
           element={<DeleteSubConstituency />}
         ></Route>
+        <Route path="form45/:id" element={<Form45 />}></Route>
         <Route
           path="updateconstituency/:id"
           element={<UpdateSubConstituency />}

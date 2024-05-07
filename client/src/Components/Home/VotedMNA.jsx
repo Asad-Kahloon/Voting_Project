@@ -7,10 +7,11 @@ const VotedMNA = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    const cnic = localStorage.getItem("current user");
+    const cnicString = localStorage.getItem("current user");
+    const cnic = parseInt(cnicString.replace(/"/g, ""), 10);
 
     axios
-      .put(`http://localhost:3001/voter/votedmna`, cnic)
+      .patch(`http://localhost:3001/voter/votedmna?cnic=${cnic}`)
       .then((res) => {
         if (res.data.updated) {
           console.log("Voted MNA");

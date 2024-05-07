@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import { verifySuperAdmin, verifySubAdmin } from "./auth.js";
 
 import { Constituency } from "../models/Constituency.js";
+import { Candidate } from "../models/Candidate.js";
+import { Voter } from "../models/Voter.js";
 import { SubAdmin } from "../models/SubAdmin.js";
 
 const router = express.Router();
@@ -86,6 +88,89 @@ router.get("/constituency/:id", async (req, res) => {
     const id = req.params.id;
     const constituency = await Constituency.findById({ _id: id });
     return res.json(constituency);
+  } catch (error) {
+    return res.json(error);
+  }
+});
+
+router.get("/form45/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const constituency = await Constituency.findById({ _id: id });
+    const currentconstituency = constituency.constituencyname;
+
+    const mpacandidates = await Candidate.find({
+      constituency: currentconstituency,
+      category: "MPA",
+    });
+
+    const mnacandidates = await Candidate.find({
+      constituency: currentconstituency,
+      category: "MNA",
+    });
+
+    const totalvoters = await Voter.countDocuments({
+      constituency: currentconstituency,
+    });
+
+    const malevoters = await Voter.countDocuments({
+      constituency: currentconstituency,
+      gender: "male",
+    });
+
+    const femalevoters = await Voter.countDocuments({
+      constituency: currentconstituency,
+      gender: "female",
+    });
+
+    const malevotedmpa = await Voter.countDocuments({
+      constituency: currentconstituency,
+      votedmpa: true,
+      gender: "male",
+    });
+
+    const femalevotedmpa = await Voter.countDocuments({
+      constituency: currentconstituency,
+      votedmpa: true,
+      gender: "female",
+    });
+
+    const malevotedmna = await Voter.countDocuments({
+      constituency: currentconstituency,
+      votedmna: true,
+      gender: "male",
+    });
+
+    const femalevotedmna = await Voter.countDocuments({
+      constituency: currentconstituency,
+      votedmna: true,
+      gender: "female",
+    });
+
+    const votedmna = await Voter.countDocuments({
+      constituency: currentconstituency,
+      votedmna: true,
+    });
+
+    const votedmpa = await Voter.countDocuments({
+      constituency: currentconstituency,
+      votedmpa: true,
+    });
+
+    return res.json({
+      currentconstituency,
+      mpacandidates,
+      mnacandidates,
+      totalvoters,
+      malevoters,
+      femalevoters,
+      votedmna,
+      malevotedmna,
+      femalevotedmna,
+      votedmpa,
+      malevotedmpa,
+      femalevotedmpa,
+    });
   } catch (error) {
     return res.json(error);
   }

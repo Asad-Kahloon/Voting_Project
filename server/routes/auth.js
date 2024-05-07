@@ -6,6 +6,12 @@ dotenv.config();
 import { SuperAdmin } from "../models/SuperAdmin.js";
 import { SubAdmin } from "../models/SubAdmin.js";
 import { Voter } from "../models/Voter.js";
+import { Candidate } from "../models/Candidate.js";
+import { Constituency } from "../models/Constituency.js";
+import { District } from "../models/District.js";
+import { Category } from "../models/Category.js";
+import { Party } from "../models/Party.js";
+import { Province } from "../models/Province.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
@@ -17,11 +23,11 @@ router.post("/login", async (req, res) => {
   if (role === "superadmin") {
     const superadmin = await SuperAdmin.findOne({ cnic });
     if (!superadmin) {
-      return res.json({ message: "Super Admin not found" });
+      return res.json({ login: false, message: "Super Admin not found" });
     }
     const validPassword = await bcrypt.compare(password, superadmin.password);
     if (!validPassword) {
-      return res.json({ message: "wrong password" });
+      return res.json({ login: false, message: "wrong password" });
     }
     const token = jwt.sign(
       { cnic: superadmin.cnic, role: "superadmin" },
@@ -32,11 +38,11 @@ router.post("/login", async (req, res) => {
   } else if (role === "voter") {
     const voter = await Voter.findOne({ cnic });
     if (!voter) {
-      return res.json({ message: "voter not found" });
+      return res.json({ login: false, message: "voter not found" });
     }
     const validPassword = await bcrypt.compare(password, voter.password);
     if (!validPassword) {
-      return res.json({ message: "wrong password" });
+      return res.json({ login: false, message: "wrong password" });
     }
     const token = jwt.sign(
       { cnic: voter.cnic, role: "voter" },
@@ -47,11 +53,11 @@ router.post("/login", async (req, res) => {
   } else if (role === "subadmin") {
     const subadmin = await SubAdmin.findOne({ cnic });
     if (!subadmin) {
-      return res.json({ message: "SubAdmin not found" });
+      return res.json({ login: false, message: "SubAdmin not found" });
     }
     const validPassword = await bcrypt.compare(password, subadmin.password);
     if (!validPassword) {
-      return res.json({ message: "Wrong password" });
+      return res.json({ login: false, message: "Wrong password" });
     }
     // Include province and district in the token payload
     const tokenPayload = {
@@ -72,6 +78,62 @@ router.post("/login", async (req, res) => {
       token,
     });
   } else {
+  }
+});
+
+router.get("/subcount", async (req, res) => {
+  try {
+    const mna = await Candidate.countDocuments({
+      category: "MNA",
+    });
+
+    const mpa = await Candidate.countDocuments({
+      category: "MPA",
+    });
+
+    const malecandidate = await Candidate.countDocuments({
+      gender: "male",
+    });
+
+    const femalecandidate = await Candidate.countDocuments({
+      gender: "female",
+    });
+
+    const candidate = await Candidate.countDocuments();
+
+    const province = await Province.countDocuments();
+
+    const district = await District.countDocuments();
+
+    const party = await Party.countDocuments();
+
+    const constituency = await Constituency.countDocuments();
+
+    const allvoter = await Voter.countDocuments();
+
+    const malevoter = await Voter.countDocuments({ gender: "male" });
+    const femalevoter = await Voter.countDocuments({ gender: "female" });
+
+    const category = await Category.countDocuments();
+
+    return res.json({
+      ok: true,
+      mna,
+      mpa,
+      candidate,
+      malecandidate,
+      femalecandidate,
+      allvoter,
+      malevoter,
+      femalevoter,
+      district,
+      province,
+      party,
+      constituency,
+      category,
+    });
+  } catch (error) {
+    return res.json(error);
   }
 });
 

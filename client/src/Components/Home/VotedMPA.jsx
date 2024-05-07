@@ -7,10 +7,12 @@ const VotedMPA = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    const cnic = localStorage.getItem("current user");
+    const cnicString = localStorage.getItem("current user"); // Retrieve as string
+    const cnic = parseInt(cnicString.replace(/"/g, ""), 10); // Remove quotes and parse as integer
+    console.log(cnic);
 
     axios
-      .put(`http://localhost:3001/voter/votedmpa`, cnic)
+      .patch(`http://localhost:3001/voter/votedmpa?cnic=${cnic}`)
       .then((res) => {
         if (res.data.updated) {
           console.log("Voted MPA");

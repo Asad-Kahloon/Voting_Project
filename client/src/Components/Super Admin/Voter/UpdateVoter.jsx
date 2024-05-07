@@ -78,22 +78,34 @@ const UpdateVoter = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .put("http://localhost:3001/voter/voter/" + id, {
-        name,
-        gender,
-        cnic,
-        password,
-        constituency,
-        province,
-        district,
-      })
-      .then((res) => {
-        if (res.data.updated) {
-          navigate("/superadmin/viewvoter");
-        }
-      })
-      .catch((err) => console.log(err));
+    if (
+      !name ||
+      !gender ||
+      !cnic ||
+      !password ||
+      !constituency ||
+      !province ||
+      !district
+    ) {
+      alert("please fill out all the fields");
+    } else {
+      axios
+        .put("http://localhost:3001/voter/voter/" + id, {
+          name,
+          gender,
+          cnic,
+          password,
+          constituency,
+          province,
+          district,
+        })
+        .then((res) => {
+          if (res.data.updated) {
+            navigate("/superadmin/viewvoter");
+          }
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   return (

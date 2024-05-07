@@ -50,22 +50,36 @@ const AddSubadmin = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:3001/subadmin/add", {
-        name,
-        cnic,
-        password,
-        district,
-        province,
-        gender,
-      })
-      .then((res) => {
-        if (res.data.subadmin_added) {
-          navigate("/superadmin/viewsubadmin");
-        }
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
+    if (
+      name == "" ||
+      cnic == "" ||
+      password == "" ||
+      district == "" ||
+      province == "" ||
+      gender == ""
+    ) {
+      alert("Please fill out all the fields first");
+    } else {
+      axios
+        .post("http://localhost:3001/subadmin/add", {
+          name,
+          cnic,
+          password,
+          district,
+          province,
+          gender,
+        })
+        .then((res) => {
+          if (res.data.subadmin_cnic) {
+            alert(res.data.message);
+          } else if (res.data.subadmin_dist) {
+            alert(res.data.message);
+          } else if (res.data.subadmin_added) {
+            navigate("/superadmin/viewsubadmin");
+          }
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   return (

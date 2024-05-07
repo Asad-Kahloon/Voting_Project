@@ -9,19 +9,23 @@ export default function AddParty() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:3001/party/add", { name }).then((res) => {
-      if (res.data.party_added) {
-        console.log("party added");
-        navigate("/superadmin/viewparty");
-      }
-    });
+    if (!name) {
+      alert("please fill out the field");
+    } else {
+      axios.post("http://localhost:3001/party/add", { name }).then((res) => {
+        if (res.data.party_added) {
+          console.log("party added");
+          navigate("/superadmin/viewparty");
+        }
+      });
+    }
   };
 
   return (
     <main className="main-container">
       <div className="login-page">
         <div className="login-container">
-          <h2>Add Voter</h2>
+          <h2>Add Party</h2>
           <div className="form-group">
             <label htmlFor="name">Name</label>
             <input

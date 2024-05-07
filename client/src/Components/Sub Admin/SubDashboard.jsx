@@ -1,5 +1,5 @@
 import { FaLock, FaBlackTie } from "react-icons/fa";
-import { BiSolidCategory } from "react-icons/bi";
+// import { BiSolidCategory } from "react-icons/bi";
 import { MdPeopleAlt } from "react-icons/md";
 
 const SubDashboard = () => {
@@ -15,21 +15,21 @@ const SubDashboard = () => {
             <h3>Candidates</h3>
             <FaBlackTie className="card_icon" />
           </div>
-          <h1>300</h1>
+          <h1>3</h1>
         </div>
         <div className="card">
           <div className="card-inner">
             <h3>Voters</h3>
             <MdPeopleAlt className="card_icon" />
           </div>
-          <h1>33</h1>
+          <h1>3</h1>
         </div>
         <div className="card">
           <div className="card-inner">
             <h3>Votes</h3>
             <FaLock className="card_icon" />
           </div>
-          <h1>42</h1>
+          <h1>3</h1>
         </div>
       </div>
     </main>

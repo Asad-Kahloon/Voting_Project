@@ -11,24 +11,37 @@ const Login = () => {
 
   axios.defaults.withCredentials = true;
   const handleSubmit = () => {
-    axios
-      .post("http://localhost:3001/auth/login", { cnic, password, role })
-      .then((res) => {
-        if (res.data.login && res.data.role === "superadmin") {
-          // setRoleVar('superadmin')
-          localStorage.setItem("current user", JSON.stringify(cnic));
-          navigate("/superadmin");
-        } else if (res.data.login && res.data.role === "subadmin") {
-          // setRoleVar('subadmin')
-          localStorage.setItem("current user", JSON.stringify(cnic));
-          navigate("/subadmin");
-        } else if (res.data.login && res.data.role === "voter") {
-          localStorage.setItem("current user", JSON.stringify(cnic));
-          // setRoleVar('voter')
-          navigate("/voterdash");
-        }
-      })
-      .catch((err) => console.log(err));
+    if (cnic == "" || password == "") {
+      alert("enter all credentials");
+    } else {
+      axios
+        .post("http://localhost:3001/auth/login", { cnic, password, role })
+        .then((res) => {
+          if (res.data.login && res.data.role === "superadmin") {
+            // setRoleVar('superadmin')
+            localStorage.setItem("current user", JSON.stringify(cnic));
+            localStorage.setItem("current role", JSON.stringify(role));
+
+            // navigate("/superadmin");
+            navigate("/camera");
+          } else if (res.data.login && res.data.role === "subadmin") {
+            // setRoleVar('subadmin')
+            localStorage.setItem("current user", JSON.stringify(cnic));
+            localStorage.setItem("current role", JSON.stringify(role));
+            // navigate("/subadmin");
+            navigate("/camera");
+          } else if (res.data.login && res.data.role === "voter") {
+            localStorage.setItem("current user", JSON.stringify(cnic));
+            localStorage.setItem("current role", JSON.stringify(role));
+            // setRoleVar('voter')
+            // navigate("/voterdash");
+            navigate("/camera");
+          } else if (!res.data.login) {
+            alert(res.data.message);
+          }
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   return (

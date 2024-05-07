@@ -64,22 +64,25 @@ const UpdateSubadmin = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .put("http://localhost:3001/subadmin/subadmin/" + id, {
-        name,
-        cnic,
-        password,
-        district,
-        province,
-        gender,
-      })
-      .then((res) => {
-        if (res.data.updated) {
-          navigate("/superadmin/viewsubadmin");
-        }
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
+    if (!name || !cnic || !password || !district || !province || !gender) {
+      alert("Please Fill out all the fields");
+    } else {
+      axios
+        .put("http://localhost:3001/subadmin/subadmin/" + id, {
+          name,
+          cnic,
+          password,
+          district,
+          province,
+          gender,
+        })
+        .then((res) => {
+          if (res.data.updated) {
+            navigate("/superadmin/viewsubadmin");
+          }
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   return (

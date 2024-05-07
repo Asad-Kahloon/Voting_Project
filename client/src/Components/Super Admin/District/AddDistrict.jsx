@@ -20,20 +20,25 @@ const AddDistrict = () => {
   }, []);
 
   axios.defaults.withCredentials = true;
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:3001/district/add", {
-        provincename,
-        districtname,
-      })
-      .then((res) => {
-        if (res.data.district_added) {
-          navigate("/superadmin/viewdistrict");
-        }
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
+    if (!provincename || !districtname) {
+      alert("please fill out all the field");
+    } else {
+      axios
+        .post("http://localhost:3001/district/add", {
+          provincename,
+          districtname,
+        })
+        .then((res) => {
+          if (res.data.district_added) {
+            navigate("/superadmin/viewdistrict");
+          }
+          console.log(res);
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   return (
